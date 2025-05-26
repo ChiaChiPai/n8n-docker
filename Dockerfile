@@ -4,16 +4,14 @@ ARG N8N_VERSION=1.93.0
 
 RUN apk add --update graphicsmagick tzdata
 
-USER root
-
 RUN apk --update add --virtual build-dependencies python3 build-base && \
-    npm_config_user=root npm install --location=global n8n@${N8N_VERSION} && \
+    npm install --location=global n8n@${N8N_VERSION} && \
     apk del build-dependencies
 
-WORKDIR /data
+USER node
 
-EXPOSE $PORT
+WORKDIR /home/node/.n8n
 
-ENV N8N_USER_ID=root
+EXPOSE 5678
 
-CMD export N8N_PORT=$PORT && n8n start
+CMD n8n start
